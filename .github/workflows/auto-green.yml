@@ -1,0 +1,25 @@
+name: Auto Green
+on:
+  schedule:
+    - cron: "0 0 * * *"  # 每天 UTC 0点（北京时间早8点）运行
+  workflow_dispatch:     # 允许手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Make a commit
+        run: |
+          git config --local user.email "yyy20333@gmail.com"
+          git config --local user.name "yyyxiaomeng"
+          date > date.txt
+          git add .
+          git commit -m "Keep green $(date)"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
